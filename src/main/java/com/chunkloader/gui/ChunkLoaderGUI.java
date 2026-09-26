@@ -17,7 +17,6 @@ public class ChunkLoaderGUI {
     public static final String GUI_TITLE = ChatColor.translateAlternateColorCodes('&', "&8ChunkLoader - Configurações");
 
     public static void openGUI(Player player, ChunkLoaderData loader) {
-        ChunkLoaderPlugin plugin = ChunkLoaderPlugin.getInstance();
         Inventory gui = Bukkit.createInventory(null, 27, GUI_TITLE + " #" + loader.getId());
 
         // Slot 10: Radius 1x1 (Radius = 0)
@@ -47,14 +46,20 @@ public class ChunkLoaderGUI {
         // Slot 22: Toggle Active Status (Status Item)
         ItemStack statusItem;
         if (loader.isActive()) {
-            statusItem = MaterialAdapter.createItemStack("LIME_WOOL", 1, (short) 5);
+            statusItem = MaterialAdapter.isLegacy()
+                    ? MaterialAdapter.createItemStack("WOOL", 1, (short) 5)
+                    : MaterialAdapter.createItemStack("LIME_WOOL", 1, (short) 0);
+
             List<String> lore = Arrays.asList(
                     ChatColor.GRAY + "Status atual: " + ChatColor.GREEN + "ATIVADO",
                     ChatColor.YELLOW + "Clique para desativar este ChunkLoader."
             );
             statusItem = MaterialAdapter.setDisplayNameAndLore(statusItem, ChatColor.GREEN + "" + ChatColor.BOLD + "ChunkLoader Ativo", lore);
         } else {
-            statusItem = MaterialAdapter.createItemStack("RED_WOOL", 1, (short) 14);
+            statusItem = MaterialAdapter.isLegacy()
+                    ? MaterialAdapter.createItemStack("WOOL", 1, (short) 14)
+                    : MaterialAdapter.createItemStack("RED_WOOL", 1, (short) 0);
+
             List<String> lore = Arrays.asList(
                     ChatColor.GRAY + "Status atual: " + ChatColor.RED + "DESATIVADO",
                     ChatColor.YELLOW + "Clique para ativar este ChunkLoader."
@@ -76,12 +81,15 @@ public class ChunkLoaderGUI {
     }
 
     private static ItemStack createRadiusItem(String size, int radius, boolean selected, boolean hasPerm) {
-        String matName = selected ? "EMERALD_BLOCK" : (hasPerm ? "GRASS_BLOCK" : "BARRIER");
+        String matName;
         short damage = 0;
-        if (!selected && !hasPerm) {
+
+        if (selected) {
+            matName = "EMERALD_BLOCK";
+        } else if (!hasPerm) {
             matName = "BARRIER";
-        } else if (!selected) {
-            matName = "DAYLIGHT_DETECTOR";
+        } else {
+            matName = MaterialAdapter.isLegacy() ? "DAYLIGHT_DETECTOR" : "DAYLIGHT_DETECTOR";
         }
 
         ItemStack item = MaterialAdapter.createItemStack(matName, 1, damage);
