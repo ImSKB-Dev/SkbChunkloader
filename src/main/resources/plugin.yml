@@ -1,0 +1,11 @@
+name: ChunkLoader
+version: 1.0.0
+main: com.chunkloader.ChunkLoaderPlugin
+description: Universal ChunkLoader plugin supporting Spigot/Paper/Folia from 1.12.2 to 1.21+
+author: Jules
+folia-supported: true
+commands:
+  chunkloader:
+    description: Main command for ChunkLoader
+    aliases: [cl]
+    permission: chunkloader.use

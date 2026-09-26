@@ -1,0 +1,44 @@
+# ============================================================ #
+#                  ChunkLoader Configuration                   #
+# ============================================================ #
+
+# Bloco e Item Ativador Padrão
+loader-block:
+  material: "REDSTONE_BLOCK"
+  damage: 0
+  name: "&a&lChunkLoader Block"
+  lore:
+    - "&7Coloque este bloco no chão"
+    - "&7e clique com o item ativador para configurá-lo."
+
+activator-item:
+  material: "NETHER_STAR"
+  damage: 0
+  name: "&e&lAtivador de ChunkLoader"
+  lore:
+    - "&7Clique com este item em um bloco de ChunkLoader"
+    - "&7para abrir o menu de configurações."
+
+# Configuração do GUI
+gui:
+  title: "&8ChunkLoader - Configurações"
+  slots: 27
+
+# Mensagens
+messages:
+  no-permission: "&cVocê não tem permissão para usar este comando."
+  only-players: "&cApenas jogadores podem executar este comando."
+  plugin-reloaded: "&aConfiguração do ChunkLoader recarregada com sucesso!"
+  setblock-success: "&aBloco de ChunkLoader definido para o item da sua mão!"
+  setitem-success: "&aItem ativador definido para o item da sua mão!"
+  hold-item-error: "&cVocê precisa estar segurando um item na mão principal!"
+  give-success: "&aVocê recebeu {amount}x {type}!"
+  player-not-found: "&cJogador não encontrado."
+  invalid-args: "&cUso incorreto! Digite /cl para ver a ajuda."
+  loader-placed: "&aChunkLoader colocado com sucesso!"
+  loader-removed: "&cChunkLoader removido com sucesso!"
+  loader-activated: "&aChunkLoader ativado para o raio {radius}x{radius}!"
+  loader-deactivated: "&cChunkLoader desativado!"
+  no-radius-permission: "&cVocê não possui permissão para o raio {radius}x{radius}!"
+  max-loaders-reached: "&cVocê atingiu o limite de ChunkLoaders ativos!"
+  not-owner: "&cEste ChunkLoader pertence a {owner}!"
