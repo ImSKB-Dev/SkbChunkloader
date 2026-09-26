@@ -14,10 +14,17 @@ import java.util.List;
 
 public class ChunkLoaderGUI {
 
-    public static final String GUI_TITLE = ChatColor.translateAlternateColorCodes('&', "&8ChunkLoader - Configurações");
+    // Short title compatible with 1.12.2 Bukkit (max 32 chars)
+    public static final String GUI_TITLE = ChatColor.translateAlternateColorCodes('&', "&8ChunkLoader");
 
     public static void openGUI(Player player, ChunkLoaderData loader) {
-        Inventory gui = Bukkit.createInventory(null, 27, GUI_TITLE + " #" + loader.getId());
+        // Enforce max 32 characters for 1.12.2 compatibility
+        String rawTitle = GUI_TITLE + " " + loader.getX() + "," + loader.getZ();
+        if (rawTitle.length() > 32) {
+            rawTitle = rawTitle.substring(0, 32);
+        }
+
+        Inventory gui = Bukkit.createInventory(null, 27, rawTitle);
 
         // Slot 10: Radius 1x1 (Radius = 0)
         boolean has1x1 = player.hasPermission("chunkloader.radius.1x1") || player.hasPermission("chunkloader.admin");
@@ -89,7 +96,7 @@ public class ChunkLoaderGUI {
         } else if (!hasPerm) {
             matName = "BARRIER";
         } else {
-            matName = MaterialAdapter.isLegacy() ? "DAYLIGHT_DETECTOR" : "DAYLIGHT_DETECTOR";
+            matName = "DAYLIGHT_DETECTOR";
         }
 
         ItemStack item = MaterialAdapter.createItemStack(matName, 1, damage);

@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name for release (e.g. v1.0.0)'
+        required: false
+        default: 'v1.0.0'
 
 permissions:
   contents: write
@@ -27,12 +32,24 @@ jobs:
       - name: Build plugin with Maven
         run: mvn clean package --batch-mode
 
+      - name: Set Release Tag Name
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag_name }}"
+            if [ -z "$TAG" ]; then TAG="v1.0.0"; fi
+          else
+            TAG="${{ github.ref_name }}"
+          fi
+          echo "release_tag=$TAG" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
         with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
           files: target/ChunkLoader-1.0.0.jar
-          name: ChunkLoader Release ${{ github.ref_name }}
+          name: ChunkLoader Release ${{ steps.tag.outputs.release_tag }}
           draft: false
           prerelease: false
         env:

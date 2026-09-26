@@ -150,8 +150,27 @@ public class ChunkLoaderListener implements Listener {
         }
 
         Player player = (Player) event.getWhoClicked();
-        String subtitle = title.replace(ChunkLoaderGUI.GUI_TITLE + " #", "");
-        ChunkLoaderData data = plugin.getDataManager().getLoader(subtitle);
+
+        // Find corresponding loader near player location / title coords
+        ChunkLoaderData data = null;
+        for (ChunkLoaderData candidate : plugin.getDataManager().getLoadersByOwner(player.getUniqueId())) {
+            String titlePart = candidate.getX() + "," + candidate.getZ();
+            if (title.contains(titlePart)) {
+                data = candidate;
+                break;
+            }
+        }
+
+        if (data == null) {
+            // Admin fallback or fallback to any matching loader in same world/proximity
+            for (ChunkLoaderData candidate : plugin.getDataManager().getAllLoaders()) {
+                String titlePart = candidate.getX() + "," + candidate.getZ();
+                if (title.contains(titlePart)) {
+                    data = candidate;
+                    break;
+                }
+            }
+        }
 
         if (data == null) {
             player.closeInventory();
